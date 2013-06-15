@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="PHP macros">
+    <macrodef name="phpClearApcCache">
+        <attribute name="php" default="php" />
+        <attribute name="failonerror" default="true" />
+        <sequential>
+            <exec executable="@{php}" failonerror="@{failonerror}">
+                <arg line="-r &quot;foreach(['user', 'opcode', ''] as $v) apc_clear_cache($v);&quot;" />
+            </exec>
+        </sequential>
+    </macrodef>
+    
+    <macrodef name="phpUnit">
+        <attribute name="phpunit" default="phpunit" />
+        <attribute name="failonerror" default="true" />
+        <attribute name="configuration" default="app" />
+        <attribute name="dir" default="src" />
+        <sequential>
+            <exec executable="@{phpunit}" failonerror="@{failonerror}">
+                <arg line="-c @{configuration} @{dir}" />
+            </exec>
+        </sequential>
+    </macrodef>
+</project>

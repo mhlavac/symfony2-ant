@@ -1,0 +1,47 @@
+<project name="Symfony 2 project" basedir="." default="develop">
+    <import file="${basedir}/macro/composer.xml" />
+    <import file="${basedir}/macro/php.xml" />
+    <import file="${basedir}/macro/sf2.xml" />
+    
+    <target name="build">
+        <echo message="Building for production..." level="info" />
+        <mkdir dir="dist" />
+        
+        // Create dir dist
+        // Copy all needed files there
+        // Do composer install --prefer-dist
+        // Do composer dump --optimize
+        // Change .htaccess with one that links to app.php
+        // Dump assets
+        // Install assets
+        // Run doctrine:ensure-production-settings
+        // Router router:dump-apache
+    </target>
+    
+    <target name="test" depends="develop">
+        <phpUnit />
+    </target>
+    
+    <target name="develop">
+        <echo message="Preparing project for development..." level="info" />
+        <delete failonerror="true">
+            <fileset dir="app/cache" excludes=".gitlock" />
+        </delete>
+        
+        <composerInstall />
+        <sf2Console command="doctrine:cache:clear-metadata" failonerror="true" />
+        <sf2Console command="doctrine:cache:clear-query" failonerror="true" />
+        <sf2Console command="doctrine:cache:clear-result" failonerror="true" />
+        <sf2Console command="cache:clear" failonerror="true" />
+        
+        <echo message="Project ready" level="info" />
+    </target>
+    
+    <target name="gitRegisterHooks">
+        <!-- git pre-commit -->
+        <!-- runt tests -->
+        
+        <!-- git post-checkout -->
+        <!-- run develop -->
+    </target>
+</project>

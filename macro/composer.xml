@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Composer macros">
+    <macrodef name="composerInstall">
+        <attribute name="composer" default="composer" />
+        <attribute name="failonerror" default="true" />
+        <sequential>
+            <exec executable="@{composer}" failonerror="@{failonerror}">
+                <arg line="install" />
+            </exec>
+        </sequential>
+    </macrodef>
+    
+    <macrodef name="composerOptimize">
+        <attribute name="composer" default="composer" />
+        <attribute name="failonerror" default="true" />
+        <sequential>
+            <exec executable="@{composer}" failonerror="@{failonerror}">
+                <arg line="dumpautoload --optimize" />
+            </exec>
+        </sequential>
+    </macrodef>
+</project>

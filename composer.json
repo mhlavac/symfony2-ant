@@ -1,0 +1,13 @@
+{
+    "name": "mhlavac/symfony2-ant",
+    "description": "Ant macros and builds to ease your ant configuration",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martin Hlaváč",
+            "email": "info@mhlavac.net"
+        }
+    ],
+    "require": {
+    }
+}
