@@ -1,0 +1,14 @@
+.git
+app/logs/*
+app/cache/*
+app/logs/*
+.sublime
+.settings
+.buildpath
+.gitignore
+.project
+LICENSE
+README.md
+makefile
+doc
+build

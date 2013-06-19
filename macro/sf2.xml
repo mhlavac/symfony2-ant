@@ -14,7 +14,7 @@
             </exec>
         </sequential>
     </macrodef>
-    
+
     <macrodef name="sf2DatabaseCacheClear">
         <attribute name="php" default="php" />
         <attribute name="dir" default="${basedir}" />
@@ -27,7 +27,7 @@
             <sf2Console executable="@{php}" dir="@{dir}" failonerror="@{failonerror}" console="@{console}" env="@{env}" command="doctrine:cache:clear-meta" />
         </sequential>
     </macrodef>
-    
+
     <macrodef name="sf2CacheWarmup">
         <attribute name="php" default="php" />
         <attribute name="dir" default="${basedir}" />
@@ -40,7 +40,7 @@
             <sf2Console executable="@{php}" dir="@{dir}" failonerror="@{failonerror}" console="@{console}" env="@{env}" command="cache:warmup" />
         </sequential>
     </macrodef>
-    
+
     <macrodef name="sf2CacheClear">
         <attribute name="dir" default="${basedir}" />
         <attribute name="env" default="dev" />
@@ -49,14 +49,29 @@
             <delete dir="@{dir}/app/cache/@{env}" failonerror="@{failonerror}" />
         </sequential>
     </macrodef>
-    
+
     <macrodef name="sf2CacheClearAll">
         <attribute name="dir" default="${basedir}" />
         <attribute name="failonerror" default="true" />
         <sequential>
-	        <delete includeEmptyDirs="true" failonerror="@{failonerror}">
-	            <fileset dir="@{dir}/app/cache" includes="**/*" excludes=".gitkeep" />
-	        </delete>
+            <delete includeEmptyDirs="true" failonerror="@{failonerror}">
+                <fileset dir="@{dir}/app/cache" includes="**/*" excludes=".gitkeep" />
+            </delete>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="sf2RouterDumpApache">
+        <attribute name="php" default="php" />
+        <attribute name="dir" default="${basedir}" />
+        <attribute name="console" default="app/console" />
+        <attribute name="env" default="dev" />
+        <attribute name="failonerror" default="true" />
+        <attribute name="outputfile" default="@{dir}/web/.htaccess" />
+        <sequential>
+            <exec executable="@{php}" dir="@{dir}" failonerror="@{failonerror}">
+                <arg line="@{console} router:dump-apache --env=@{env}" />
+                <redirector output="@{outputfile}" alwayslog="true" />
+            </exec>
         </sequential>
     </macrodef>
 </project>

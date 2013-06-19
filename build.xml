@@ -2,46 +2,64 @@
     <import file="${basedir}/macro/composer.xml" />
     <import file="${basedir}/macro/php.xml" />
     <import file="${basedir}/macro/sf2.xml" />
-    
+    <import file="${basedir}/macro/linux.xml" />
+
+    <property name="distDirectory" value="dist">
+
     <target name="build">
-        <echo message="Building for production..." level="info" />
-        <mkdir dir="dist" />
-        
-        // Create dir dist
-        // Copy all needed files there
-        // Do composer install --prefer-dist
-        // Do composer dump --optimize
-        // Change .htaccess with one that links to app.php
-        // Dump assets
-        // Install assets
-        // Run doctrine:ensure-production-settings
-        // Router router:dump-apache
+        <echo message="Building..." level="info" />
+        <mkdir dir="${distDirectory}" />
+        <rsync excludefrom="deploy/build/rsync.exclude" destination="${distDirectory}" />
+
+        <echo message="Optimizing composer..." level="info" />
+
+        <composerInstall dir="${distDirectory}" />
+        <composerOptimize dir="${distDirectory}" />
+
+        <sf2Console dir="${distDirectory}" command="assetic:dump" env="prod" />
+        <sf2CacheClearAll dir="${distDirectory}" />
+        <sf2CacheWarmup dir="${distDirectory}" />
+
+        <echo message="Optimizing.." level="info" />
+        <sf2Console dir="${distDirectory}" command="assets:install" env="prod" />
+        <sf2Console dir="${distDirectory}" command="assetic:dump" env="prod" />
+        <sf2Console dir="${distDirectory}" command="doctrine:ensure-production-settings" env="prod" />
+        <sf2RouterDumpApache dir="${distDirectory}" end="prod" />
+
+        <phpUnit dir="${distDirectory}" />
+        <executeAllFilesInDirectory dir="deploy/build" />
+
+        <echo message="Succesfuly built..." level="info" />
     </target>
-    
+
     <target name="test" depends="develop">
         <phpUnit />
+
+        <executeAllFilesInDirectory dir="deploy/test" />
+
+        <echo message="Succesfuly tested..." level="info" />
     </target>
-    
+
     <target name="develop">
         <echo message="Preparing project for development..." level="info" />
         <delete failonerror="true">
             <fileset dir="app/cache" excludes=".gitlock" />
         </delete>
-        
+
         <composerInstall />
         <sf2Console command="doctrine:cache:clear-metadata" failonerror="true" />
         <sf2Console command="doctrine:cache:clear-query" failonerror="true" />
         <sf2Console command="doctrine:cache:clear-result" failonerror="true" />
         <sf2Console command="cache:clear" failonerror="true" />
-        
-        <echo message="Project ready" level="info" />
+
+        <executeAllFilesInDirectory dir="deploy/develop" />
+        <echo message="Succesfuly prepared for development..." level="info" />
     </target>
-    
+
     <target name="gitRegisterHooks">
-        <!-- git pre-commit -->
-        <!-- runt tests -->
-        
-        <!-- git post-checkout -->
-        <!-- run develop -->
+        <echo message="Registering hooks..." level="info" />
+        <copy file="git_hooks/pre-commit.sh" tofile=".git/hooks/pre-commit.sh" />
+        <copy file="git_hooks/post-checkout.sh" tofile=".git/hooks/post-checkout.sh" />
+        <echo message="Succesfuly registered hooks..." level="info" />
     </target>
 </project>

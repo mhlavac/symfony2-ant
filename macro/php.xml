@@ -10,15 +10,16 @@
             </exec>
         </sequential>
     </macrodef>
-    
+
     <macrodef name="phpUnit">
         <attribute name="phpunit" default="phpunit" />
         <attribute name="failonerror" default="true" />
         <attribute name="configuration" default="app" />
-        <attribute name="dir" default="src" />
+        <attribute name="dir" default="${basedir}" />
+        <attribute name="testdir" default="" />
         <sequential>
-            <exec executable="@{phpunit}" failonerror="@{failonerror}">
-                <arg line="-c @{configuration} @{dir}" />
+            <exec dir="@{dir}" executable="@{phpunit}" failonerror="@{failonerror}">
+                <arg line="-c @{configuration} @{testdir}" />
             </exec>
         </sequential>
     </macrodef>

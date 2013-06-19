@@ -4,18 +4,20 @@
     <macrodef name="composerInstall">
         <attribute name="composer" default="composer" />
         <attribute name="failonerror" default="true" />
+        <attribute name="dir" default="${basedir}" />
         <sequential>
-            <exec executable="@{composer}" failonerror="@{failonerror}">
+            <exec executable="@{composer}" failonerror="@{failonerror}" dir="@{dir}">
                 <arg line="install" />
             </exec>
         </sequential>
     </macrodef>
-    
+
     <macrodef name="composerOptimize">
         <attribute name="composer" default="composer" />
         <attribute name="failonerror" default="true" />
+        <attribute name="dir" default="${basedir}" />
         <sequential>
-            <exec executable="@{composer}" failonerror="@{failonerror}">
+            <exec executable="@{composer}" failonerror="@{failonerror}" dir="@{dir}">
                 <arg line="dumpautoload --optimize" />
             </exec>
         </sequential>

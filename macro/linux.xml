@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Linux macros">
+    <macrodef name="rsync">
+        <attribute name="excludefrom" default="rsync.exclude" />
+        <attribute name="source" default="${basedir}" />
+        <attribute name="destination" default="" />
+        <sequential>
+            <exec executable="rsync" failonerror="true">
+                <arg line="--exclude-from @{excludefrom} @{source} @{destination}" />
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="executeAllFilesInDirectory">
+        <attribute name="dir" default="${basedir}" />
+        <sequential>
+            <exec executable="scripts/execute_every_file_in_directory.sh" failonerror="true">
+                <arg line="@{dir}" />
+            </exec>
+        </sequential>
+    </macrodef>
+</project>
