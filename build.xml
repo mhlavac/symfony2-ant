@@ -58,8 +58,9 @@
 
     <target name="gitRegisterHooks">
         <echo message="Registering hooks..." level="info" />
-        <copy file="git_hooks/pre-commit.sh" tofile=".git/hooks/pre-commit.sh" />
-        <copy file="git_hooks/post-checkout.sh" tofile=".git/hooks/post-checkout.sh" />
+        <copy todir="${basedir}/.git/hooks">
+            <fileset dir="${basedir}/git/hooks" />
+        </copy>
         <echo message="Succesfuly registered hooks..." level="info" />
     </target>
 </project>

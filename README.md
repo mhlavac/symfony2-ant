@@ -1,3 +1,8 @@
+Not ready yet
+-------------
+
+Please keep in mind that this script is work in progress and it is not working 100% correct yet.
+
 Symfony 2 ant macros and builds
 ===============================
 
