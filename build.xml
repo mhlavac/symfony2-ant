@@ -1,15 +1,22 @@
 <project name="Symfony 2 project" basedir="." default="develop">
-    <import file="${basedir}/macro/composer.xml" />
-    <import file="${basedir}/macro/php.xml" />
-    <import file="${basedir}/macro/sf2.xml" />
-    <import file="${basedir}/macro/linux.xml" />
+    <property name="projectRoot" value="${basedir}" />
+    <property name="projectGitHooks" value="${projectRoot}/.git/hooks" />
+    <property name="sf2AntDirectory" value="${projectRoot}/vendor/mhlavac/symfony2-ant" />
+    <property name="sf2AntMacroDirectory" value="${sf2AntDirectory}/macro" />
+    <property name="sf2AntGitHooksDirectory" value="${sf2AntDirectory}/git/hooks" />
+    <property name="sf2AntScriptsDirectory" value="${sf2AntDirectory}/scripts" />
+    <property name="buildHooksDirectory" value="${projectRoot}/build" />
+    <property name="distDirectory" value="dist" />
 
-    <property name="distDirectory" value="dist">
+    <import file="${sf2AntMacroDirectory}/composer.xml" />
+    <import file="${sf2AntMacroDirectory}/php.xml" />
+    <import file="${sf2AntMacroDirectory}/sf2.xml" />
+    <import file="${sf2AntMacroDirectory}/linux.xml" />
 
     <target name="build">
         <echo message="Building..." level="info" />
         <mkdir dir="${distDirectory}" />
-        <rsync excludefrom="deploy/build/rsync.exclude" destination="${distDirectory}" />
+        <rsync excludefrom="${buildHooksDirectory}/build/rsync.exclude" destination="${distDirectory}" />
 
         <echo message="Optimizing composer..." level="info" />
 
@@ -27,7 +34,7 @@
         <sf2RouterDumpApache dir="${distDirectory}" end="prod" />
 
         <phpUnit dir="${distDirectory}" />
-        <executeAllFilesInDirectory dir="deploy/build" />
+        <executeAllFilesInDirectory dir="${buildHooksDirectory}/build" scriptsdirectory="${sf2AntScriptsDirectory}" />
 
         <echo message="Succesfuly built..." level="info" />
     </target>
@@ -35,7 +42,7 @@
     <target name="test" depends="develop">
         <phpUnit />
 
-        <executeAllFilesInDirectory dir="deploy/test" />
+        <executeAllFilesInDirectory dir="${buildHooksDirectory}/test" scriptsdirectory="${sf2AntScriptsDirectory}" />
 
         <echo message="Succesfuly tested..." level="info" />
     </target>
@@ -47,20 +54,29 @@
         </delete>
 
         <composerInstall />
-        <sf2Console command="doctrine:cache:clear-metadata" failonerror="true" />
-        <sf2Console command="doctrine:cache:clear-query" failonerror="true" />
-        <sf2Console command="doctrine:cache:clear-result" failonerror="true" />
-        <sf2Console command="cache:clear" failonerror="true" />
+        <sf2DatabaseCacheClear />
+        <sf2CacheClear />
+        <sf2Console command="cache:clear" />
 
-        <executeAllFilesInDirectory dir="deploy/develop" />
+        <executeAllFilesInDirectory dir="${buildHooksDirectory}/develop" scriptsdirectory="${sf2AntScriptsDirectory}" />
+
         <echo message="Succesfuly prepared for development..." level="info" />
     </target>
 
     <target name="gitRegisterHooks">
-        <echo message="Registering hooks..." level="info" />
-        <copy todir="${basedir}/.git/hooks">
-            <fileset dir="${basedir}/git/hooks" />
-        </copy>
+        <echo message="Registering default hooks..." level="info" />
+        <!--
+            Exec must be used because current Java runtimes are not able to query file permissions in Unix/Linux
+            Additionaly, cp must be called via sh as asterix can not be used as wildcard in Linux using ant
+        -->
+        <exec executable="sh">
+            <arg value="-c" />
+            <arg value="cp -r ${sf2AntGitHooksDirectory}/* ${projectGitHooks}" />
+        </exec>
+
+        <symlink link="${projectGitHooks}/pre-commit.d/50-ant_test.sh" resource="${sf2AntScriptsDirectory}/ant_develop.sh" />
+        <symlink link="${projectGitHooks}/post-checkout.d/50-ant_develop.sh" resource="${sf2AntScriptsDirectory}/ant_test.sh" />
+
         <echo message="Succesfuly registered hooks..." level="info" />
     </target>
 </project>

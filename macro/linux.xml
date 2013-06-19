@@ -14,8 +14,9 @@
 
     <macrodef name="executeAllFilesInDirectory">
         <attribute name="dir" default="${basedir}" />
+        <attribute name="scriptsdirectory" default="scripts" />
         <sequential>
-            <exec executable="scripts/execute_every_file_in_directory.sh" failonerror="true">
+            <exec executable="@{scripts}/execute_every_file_in_directory.sh" failonerror="true">
                 <arg line="@{dir}" />
             </exec>
         </sequential>

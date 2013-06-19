@@ -1,1 +1,0 @@
-../scripts/ant_test.sh
