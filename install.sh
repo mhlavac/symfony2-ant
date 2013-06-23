@@ -19,4 +19,6 @@ fi
 ln -s $buildFile $linkName
 if [ -f $linkName ]; then
     echo "Link was succesfuly created"
+else
+    exit 1
 fi

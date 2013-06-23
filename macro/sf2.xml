@@ -22,9 +22,9 @@
         <attribute name="env" default="dev" />
         <attribute name="failonerror" default="true" />
         <sequential>
-            <sf2Console executable="@{php}" dir="@{dir}" failonerror="@{failonerror}" console="@{console}" env="@{env}" command="doctrine:cache:clear-result" />
-            <sf2Console executable="@{php}" dir="@{dir}" failonerror="@{failonerror}" console="@{console}" env="@{env}" command="doctrine:cache:clear-query" />
-            <sf2Console executable="@{php}" dir="@{dir}" failonerror="@{failonerror}" console="@{console}" env="@{env}" command="doctrine:cache:clear-meta" />
+            <sf2Console php="@{php}" dir="@{dir}" failonerror="@{failonerror}" console="@{console}" env="@{env}" command="doctrine:cache:clear-result" />
+            <sf2Console php="@{php}" dir="@{dir}" failonerror="@{failonerror}" console="@{console}" env="@{env}" command="doctrine:cache:clear-query" />
+            <sf2Console php="@{php}" dir="@{dir}" failonerror="@{failonerror}" console="@{console}" env="@{env}" command="doctrine:cache:clear-meta" />
         </sequential>
     </macrodef>
 
@@ -36,8 +36,8 @@
         <attribute name="failonerror" default="true" />
         <sequential>
             <delete dir="@{dir}/app/cache/@{env}" failonerror="@{failonerror}" />
-            <sf2Console executable="@{php}" dir="@{dir}" failonerror="@{failonerror}" console="@{console}" env="@{env}" command="cache:clear --no-warmup" />
-            <sf2Console executable="@{php}" dir="@{dir}" failonerror="@{failonerror}" console="@{console}" env="@{env}" command="cache:warmup" />
+            <sf2Console php="@{php}" dir="@{dir}" failonerror="@{failonerror}" console="@{console}" env="@{env}" command="cache:clear --no-warmup" />
+            <sf2Console php="@{php}" dir="@{dir}" failonerror="@{failonerror}" console="@{console}" env="@{env}" command="cache:warmup" />
         </sequential>
     </macrodef>
 

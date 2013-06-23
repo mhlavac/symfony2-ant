@@ -45,17 +45,17 @@
     </target>
 
     <target name="develop">
-        <!-- <echo message="Preparing project for development..." level="info" />
+        <echo message="Preparing project for development..." level="info" />
         <delete failonerror="true">
             <fileset dir="app/cache" excludes=".gitlock" />
         </delete>
 
         <composerInstall />
-        <sf2DatabaseCacheClear />
         <sf2CacheClear />
+        <sf2DatabaseCacheClear />
         <sf2Console command="cache:clear" />
 
-        <echo message="Succesfuly prepared for development..." level="info" /> -->
+        <echo message="Succesfuly prepared for development..." level="info" />
     </target>
 
     <target name="gitRegisterHooks">
