@@ -34,7 +34,6 @@
         <sf2RouterDumpApache dir="${distDirectory}" end="prod" />
 
         <phpUnit dir="${distDirectory}" />
-        <executeAllFilesInDirectory dir="${buildHooksDirectory}/build" scriptsdirectory="${sf2AntScriptsDirectory}" />
 
         <echo message="Succesfuly built..." level="info" />
     </target>
@@ -42,13 +41,11 @@
     <target name="test" depends="develop">
         <phpUnit />
 
-        <executeAllFilesInDirectory dir="${buildHooksDirectory}/test" scriptsdirectory="${sf2AntScriptsDirectory}" />
-
         <echo message="Succesfuly tested..." level="info" />
     </target>
 
     <target name="develop">
-        <echo message="Preparing project for development..." level="info" />
+        <!-- <echo message="Preparing project for development..." level="info" />
         <delete failonerror="true">
             <fileset dir="app/cache" excludes=".gitlock" />
         </delete>
@@ -58,9 +55,7 @@
         <sf2CacheClear />
         <sf2Console command="cache:clear" />
 
-        <executeAllFilesInDirectory dir="${buildHooksDirectory}/develop" scriptsdirectory="${sf2AntScriptsDirectory}" />
-
-        <echo message="Succesfuly prepared for development..." level="info" />
+        <echo message="Succesfuly prepared for development..." level="info" /> -->
     </target>
 
     <target name="gitRegisterHooks">

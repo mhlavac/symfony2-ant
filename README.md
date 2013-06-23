@@ -1,6 +1,5 @@
 Not ready yet
 -------------
-
 Please keep in mind that this script is work in progress and it is not working 100% correct yet.
 
 Symfony 2 ant macros and builds
@@ -16,22 +15,8 @@ Ant build definitions to make your life little easier. This scripts comes with 4
 How to add new script to execution
 ----------------------------------
 
-There two ways how to add your script into build definitions. First one is easy, but it requires you
-to alter the deployment script. This means that it will be harder to update deployment script with this
-repository and this will make it harder for you to update your app to newer version.
-
-Second way is to register your scripts in `deploy` directory. You can add any scripts here and they will be executed
-at the end of build sequence. It's best practice to prefix these files with numbers, this way you can define script orders.
-
-example of deploy directory:
-
-```
-deploy/
-    build/
-        00-prepare_db.sh
-        10-run_selenium_tests.sh
-        20-run_fitnesse_tests.sh
-```
+You can alter build.xml script. To do so copy it from `vendor/mhlavac/symfony2-ant/build.xml` to your project's root.
+After you copy it you can edit your version anyway you want.
 
 What's inside?
 --------------
