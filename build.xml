@@ -2,6 +2,7 @@
     <property name="projectRoot" value="${basedir}" />
     <property name="projectGitHooks" value="${projectRoot}/.git/hooks" />
     <property name="sf2AntDirectory" value="${projectRoot}/vendor/mhlavac/symfony2-ant" />
+    <property name="sf2AntBuildDirectory" value="${sf2AntDirectory}/build" />
     <property name="sf2AntMacroDirectory" value="${sf2AntDirectory}/macro" />
     <property name="sf2AntGitHooksDirectory" value="${sf2AntDirectory}/git/hooks" />
     <property name="sf2AntScriptsDirectory" value="${sf2AntDirectory}/scripts" />
@@ -16,7 +17,9 @@
     <target name="build">
         <echo message="Building..." level="info" />
         <mkdir dir="${distDirectory}" />
-        <rsync excludefrom="${buildHooksDirectory}/build/rsync.exclude" destination="${distDirectory}" />
+
+        <echo message="Copying resources..." level="info" />
+        <rsync excludefrom="${sf2AntBuildDirectory}/build/rsync.exclude" source="${basedir}/." destination="${distDirectory}" />
 
         <echo message="Optimizing composer..." level="info" />
 
@@ -31,7 +34,7 @@
         <sf2Console dir="${distDirectory}" command="assets:install" env="prod" />
         <sf2Console dir="${distDirectory}" command="assetic:dump" env="prod" />
         <sf2Console dir="${distDirectory}" command="doctrine:ensure-production-settings" env="prod" />
-        <sf2RouterDumpApache dir="${distDirectory}" end="prod" />
+        <sf2RouterDumpApache dir="${distDirectory}" env="prod" />
 
         <phpUnit dir="${distDirectory}" />
 

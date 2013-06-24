@@ -7,7 +7,7 @@
         <attribute name="destination" default="" />
         <sequential>
             <exec executable="rsync" failonerror="true">
-                <arg line="--exclude-from @{excludefrom} @{source} @{destination}" />
+                <arg line="-a --exclude-from @{excludefrom} @{source} @{destination}" />
             </exec>
         </sequential>
     </macrodef>
