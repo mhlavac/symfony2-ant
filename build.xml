@@ -1,4 +1,11 @@
 <project name="Symfony 2 project" basedir="." default="develop">
+    <property file="build.properties.local" />
+    <property file="build.properties" />
+
+    <property name="deployIdentityFile" value="" />
+    <property name="deployHost" value="" />
+    <property name="deployLocation" value="" />
+
     <property name="projectRoot" value="${basedir}" />
     <property name="projectGitHooks" value="${projectRoot}/.git/hooks" />
     <property name="sf2AntDirectory" value="${projectRoot}/vendor/mhlavac/symfony2-ant" />
@@ -14,11 +21,22 @@
     <import file="${sf2AntMacroDirectory}/sf2.xml" />
     <import file="${sf2AntMacroDirectory}/linux.xml" />
 
+    <target name="deploy">
+        <exec executable="rsync" failonerror="true"><arg line="-e ssh -aqv --delete --progress --exclude-from '${sf2AntBuildDirectory}/deploy/rsync.exclude' ${distDirectory}/ ${deployHost}:${deployLocation}" /></exec>
+        <sshexec host="${deployHost}" command="
+            cd ${deployLocation};
+            if [ -z app/config/parameters_local.yml ]; then
+                touch app/config/parameters_local.yml
+            fi
+        " />
+    </target>
+
     <target name="build">
         <echo message="Building..." level="info" />
         <mkdir dir="${distDirectory}" />
 
         <echo message="Copying resources..." level="info" />
+        <delete dir="${distDirectory}/web" />
         <rsync excludefrom="${sf2AntBuildDirectory}/build/rsync.exclude" source="${basedir}/." destination="${distDirectory}" />
 
         <echo message="Optimizing composer..." level="info" />
